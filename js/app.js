@@ -94,7 +94,13 @@ clearCanvasBtn.addEventListener("click",()=>{
     ctx.clearRect(0,0,canvas.width,canvas.height)
 })
 DownloadDrawingBtn.addEventListener("click",()=>{
-
+   let canvasImage=canvas.toDataURL("image/png");//convert canvas to an image string 
+   let anchorEle=document.createElement("a");
+   anchorEle.href=canvasImage;
+   anchorEle.download="WhiteBoard.png"
+   document.body.appendChild(anchorEle)
+   anchorEle.click()
+   document.body.removeChild(anchorEle)
 })
 
 // Mouse events on tha canvas 
