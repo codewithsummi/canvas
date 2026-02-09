@@ -44,11 +44,29 @@ function startDraw(e)//when mouse is pressed down
 
 function draw(e)//when mouse moves
 {
-
+   if(!isDrawing) return; 
+   ctx.strokeStyle=currentTool=="eraser"?"#ffffff":colorPicker.value;
+   ctx.lineWidth=brushSizeSelector.value;
+   ctx.lineTo(e.offsetX,e.offsetY);
+   ctx.stroke();
+   ctx.beginPath();
+   ctx.moveTo(e.offsetX,e.offsetY);
 }
 function stopDrawing(e)//when mouse is released
 {
-
+  if(isDrawingSquare){
+    let endX=e.offsetX;
+    let endY=e.offsetY;
+    let width=endX-startX;
+    let height=endY-startY;
+    ctx.strokeStyle=colorPicker.value
+    ctx.lineWidth=brushSizeSelector.value 
+    ctx.beginPath();
+    ctx.rect(startX,startY,width,height);
+    ctx.stroke();
+    return;
+  }
+  isDrawing=false;
 }
 //tool buttons (event listeners)
 eraserTool.addEventListener("click",()=>{
@@ -57,4 +75,29 @@ eraserTool.addEventListener("click",()=>{
     eraserTool.classList.add("active")
     drawSquareBtn.classList.remove("active")
     currentTool="eraser";
+    console.log(currentTool)
 })
+penTool.addEventListener("click",()=>{
+    isDrawingSquare=false;
+    penTool.classList.add("active")
+    eraserTool.classList.remove("active")
+    drawSquareBtn.classList.remove("active")
+    currentTool="pen";
+})
+drawSquareBtn.addEventListener("click",()=>{
+    penTool.classList.remove("active")
+    eraserTool.classList.remove("active")
+    drawSquareBtn.classList.add("active")
+   isDrawingSquare=true;
+})
+clearCanvasBtn.addEventListener("click",()=>{
+    ctx.clearRect(0,0,canvas.width,canvas.height)
+})
+DownloadDrawingBtn.addEventListener("click",()=>{
+
+})
+
+// Mouse events on tha canvas 
+canvas.addEventListener("mousedown",startDraw)
+canvas.addEventListener("mousemove",draw)
+canvas.addEventListener("mouseup",stopDrawing)
